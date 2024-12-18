@@ -97,15 +97,15 @@ def Byte_Stuffing(data, flag='F', escape='E'):
 
 def Byte_Destuffing(data, flag='F', escape='E'):
     destuffed = ""
-    skip_next = False
-    for i in range(len(data)):
-        if skip_next:
-            skip_next = False
-            continue
-        if data[i] == escape and i + 1 < len(data) and data[i + 1] in (flag, escape):
-            skip_next = True
-            continue
-        destuffed += data[i]
+    i = 0
+    while i < len(data):
+        if data[i] == escape:  
+            i += 1  
+            if i < len(data):  
+                destuffed += data[i]
+        else:
+            destuffed += data[i]
+        i += 1  
     return destuffed
     
 
