@@ -75,16 +75,18 @@ def Bit_Destuffing(data):
     destuffed = ""
     consecutive_ones = 0
 
-    for bit in data:
-        if bit == '1':
+    i = 0  
+    while i < len(data):
+        if data[i] == '1':
             consecutive_ones += 1
-            destuffed += bit
-            if consecutive_ones == 5: 
-                consecutive_ones = 0
-                continue
+            destuffed += data[i]
+            if consecutive_ones == 5:  
+                i += 1  
+                consecutive_ones = 0  
         else:
             consecutive_ones = 0
-            destuffed += bit
+            destuffed += data[i]
+        i += 1  
 
     return destuffed
 
@@ -94,7 +96,7 @@ def Byte_Stuffing(data, flag='F', escape='E'):
     stuffed = ""
     for char in data:
         if char == flag or char == escape:
-            stuffed += escape  # Add escape character before flag or escape
+            stuffed += escape 
         stuffed += char
     return stuffed
 
