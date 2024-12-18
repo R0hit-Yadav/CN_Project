@@ -74,15 +74,18 @@ def Bit_Stuffing(data):
 def Bit_Destuffing(data):
     destuffed = ""
     consecutive_ones = 0
+
     for bit in data:
         if bit == '1':
             consecutive_ones += 1
             destuffed += bit
             if consecutive_ones == 5: 
+                consecutive_ones = 0
                 continue
         else:
             consecutive_ones = 0
             destuffed += bit
+
     return destuffed
 
 
