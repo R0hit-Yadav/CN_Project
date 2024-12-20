@@ -6,13 +6,13 @@ def sender():
     receiver_address = ('127.0.0.1', 12345)
     sender_socket.settimeout(2) 
 
-    messages = ["Message 1", "Message 2", "Message 3", "END"]
+    packets = ["packet 1", "packet 2", "packet 3","packet 4","packet 5", "END"]
     sequence_number = 0
 
-    for message in messages:
+    for packet in packets:
         while True:
             try:
-                data = f"{sequence_number}:{message}"
+                data = f"{sequence_number}:{packet}"
                 sender_socket.sendto(data.encode(), receiver_address)
                 print(f"Sender: Sent -> {data}")
 

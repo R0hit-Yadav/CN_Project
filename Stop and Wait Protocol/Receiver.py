@@ -10,7 +10,7 @@ def receiver():
     while True:
         data, sender_address = receiver_socket.recvfrom(1024)
         data = data.decode()
-        sequence_number, message = data.split(":", 1)
+        sequence_number, packet = data.split(":", 1)
 
         print(f"Receiver: Received -> {data}")
 
@@ -20,14 +20,14 @@ def receiver():
 
     
         if int(sequence_number) == expected_sequence_number:
-            print(f"Receiver: Processing -> {message}")
+            print(f"Receiver: Processing -> {packet}")
             receiver_socket.sendto(str(expected_sequence_number).encode(), sender_address)
             expected_sequence_number = 1 - expected_sequence_number 
         else:
             print("Receiver: Out-of-order packet. Resending last ACK.")
             receiver_socket.sendto(str(1 - expected_sequence_number).encode(), sender_address)
 
-        if message == "END":
+        if packet == "END":
             print("Receiver: End of communication.")
             break
 

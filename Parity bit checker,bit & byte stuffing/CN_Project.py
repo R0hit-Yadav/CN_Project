@@ -26,21 +26,27 @@ def main():
             if not all(bit in '01' for bit in data):
                 print("Invalid binary data!")
             else:
-                stuffed = Bit_Stuffing(data)
-                destuffed = Bit_Destuffing(stuffed)
-                print(f"Original Data: {data}")
-                print(f"Stuffed Data:  {stuffed}")
-                print(f"Destuffed Data: {destuffed}")
+                if not Needs_Bit_Stuffing(data):
+                    print("No stuffing needed.")
+                else:
+                    stuffed = Bit_Stuffing(data)
+                    destuffed = Bit_Destuffing(stuffed)
+                    print(f"Original Data: {data}")
+                    print(f"Stuffed Data:  {stuffed}")
+                    print(f"Destuffed Data: {destuffed}")
         
         elif choice == 3: # Byte Stuffing and Destuffing
             data = input("Enter data (Like:ABFDEFEEFG): ")
             flag = input("Enter flag character (default 'F'): ") or 'F'
             escape = input("Enter escape character (default 'E'): ") or 'E'
-            stuffed = Byte_Stuffing(data, flag, escape)
-            destuffed = Byte_Destuffing(stuffed, flag, escape)
-            print(f"Original Data: {data}")
-            print(f"Stuffed Data:  {stuffed}")
-            print(f"Destuffed Data: {destuffed}")
+            if not Needs_Byte_Stuffing(data, flag, escape):
+                print("No stuffing needed.")
+            else:
+                stuffed = Byte_Stuffing(data, flag, escape)
+                destuffed = Byte_Destuffing(stuffed, flag, escape)
+                print(f"Original Data: {data}")
+                print(f"Stuffed Data:  {stuffed}")
+                print(f"Destuffed Data: {destuffed}")
         
         elif choice == 4: # Exit
             print("Exiting.. Thank You")
@@ -55,8 +61,18 @@ def Parity_Check(data):
     return "Even Parity" if data.count('1') % 2 == 0 else "Odd Parity"
 
 #=>Bit Stuffing and Destuffing
+def Needs_Bit_Stuffing(data):
+    consecutive_ones = 0
+    for bit in data:
+        if bit == '1':
+            consecutive_ones += 1
+            if consecutive_ones == 6:
+                return True  # Stuffing needed
+        else:
+            consecutive_ones = 0
+    return False  # No stuffing needed
+
 def Bit_Stuffing(data):
-    #In This senario i can cansider 5 Consecutive 1 then stuffing
     stuffed = ""
     consecutive_ones = 0
     for bit in data:
@@ -92,6 +108,9 @@ def Bit_Destuffing(data):
 
 
 #=>Byte Stuffing and Destuffing
+def Needs_Byte_Stuffing(data, flag='F', escape='E'):
+    return any(char == flag or char == escape for char in data)
+
 def Byte_Stuffing(data, flag='F', escape='E'):
     stuffed = ""
     for char in data:
